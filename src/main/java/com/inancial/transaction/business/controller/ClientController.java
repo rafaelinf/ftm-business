@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.inancial.transaction.business.dto.AuthenticateDTO;
 import com.inancial.transaction.business.dto.ClientDTO;
 import com.inancial.transaction.business.model.Client;
 import com.inancial.transaction.business.service.ClientService;
@@ -57,5 +58,17 @@ public class ClientController {
     	Client client = this.clientService.findByNumberCard(numberCard);
 		return MapperUtils.convertToDto(client);
     }    
+    
+    @GetMapping("/authenticate/{numberCard}")
+	public AuthenticateDTO authenticate(@PathVariable String numberCard) {
+    	Client client = this.clientService.findByNumberCard(numberCard);
+    	if(client != null) {
+    		AuthenticateDTO authenticateDTO = new AuthenticateDTO();
+    		authenticateDTO.setNumberCard(client.getNumberCard());
+    		authenticateDTO.setPassword(client.getPasswordCard());
+    		return authenticateDTO;
+    	}
+		return null;
+    }        
 	
 }

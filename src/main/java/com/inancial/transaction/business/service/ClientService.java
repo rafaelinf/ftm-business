@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import com.inancial.transaction.business.dto.ClientDTO;
+import com.inancial.transaction.business.dto.ScoreDTO;
 import com.inancial.transaction.business.enums.ClientStatusEnum;
 import com.inancial.transaction.business.model.Client;
 import com.inancial.transaction.business.operations.TransactionDTO;
@@ -63,11 +65,24 @@ public class ClientService {
 		return clientRepository.findByNumberCard(numberCard);
 	}	
 	
+	public Client authenticate(String numberCard, String passwordCard) {
+		return clientRepository.authenticate(numberCard, passwordCard);
+	}
+	
 	public Client debitBalance(TransactionDTO transactionDTO) {		
 		Client client = this.findByNumberCard(transactionDTO.getNumberCard());
 		client.setBalance(client.getBalance().subtract(transactionDTO.getValue()));
 		clientRepository.save(client);
 		return client;		
+	}
+	
+	public ScoreDTO updateScore(ScoreDTO scoreDTO) {
+		Client client = this.findClientByCpf(scoreDTO.getCpf());
+		if(client != null) {
+			client.setScore(client.getScore() + scoreDTO.getScore());
+		}
+		clientRepository.save(client);
+		return scoreDTO;
 	}
 
 	

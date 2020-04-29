@@ -16,4 +16,8 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 	@Query("SELECT c FROM Client c WHERE c.numberCard = :numberCard")
 	Client findByNumberCard(@Param("numberCard") String numberCard);	
 	
+	@Query("SELECT c FROM Client c WHERE c.numberCard = :numberCard AND c.passwordCard = :passwordCard")
+	Client authenticate(@Param("numberCard") String numberCard, @Param("passwordCard") String passwordCard);	
+	
+	
 }
